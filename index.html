@@ -14,7 +14,7 @@
 
         .container {
             background-color: whitesmoke;
-            width: 70%;
+            width: 60%;
             padding: 2rem;
             margin-top: 2rem;
         }
@@ -26,13 +26,11 @@
     <div class="container">
 
         <div class="card">
-            <h5 class="card-header text-center font-weight-bold">CHUYỂN CHỮ THÀNH SỐ</h5>
+            <h5 class="card-header bg-primary text-center font-weight-bold text-white">CHUYỂN CHỮ THÀNH SỐ</h5>
             <div class="card-body">
-
                 <div class="input-group">
                     <input type="number" class="form-control" placeholder="Nhập số: 100000" id="input1">
                     <div class="input-group-append">
-                        <!-- <span class="input-group-text" id="basic-addon2">@example.com</span> -->
                         <button class="btn btn-primary" onclick="DocTienBangChu()">Chuyển</button>
                     </div>
                 </div>
@@ -101,7 +99,6 @@
 
         function DocTienBangChu() {
             const SoTien = document.getElementById("input1").value;
-            console.log(SoTien);
 
             var lan = 0;
             var i = 0;
@@ -164,7 +161,7 @@
                 tmp = DocSo3ChuSo(ViTri[i]);
                 KetQua += tmp;
                 if (ViTri[i] > 0) KetQua += Tien[i];
-                if ((i > 0) && (tmp.length > 0)) KetQua += ',';//&& (!string.IsNullOrEmpty(tmp))
+                if ((i > 0) && (tmp.length > 0)) KetQua += ',';
             }
             if (KetQua.substring(KetQua.length - 1) == ',') {
                 KetQua = KetQua.substring(0, KetQua.length - 1);
@@ -173,8 +170,6 @@
 
             document.getElementsByClassName("result")[0].textContent = KetQua;
 
-            console.log(KetQua);
-            // return KetQua;//.substring(0, 1);//.toUpperCase();// + KetQua.substring(1);
         }
     </script>
 </body>
