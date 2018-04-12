@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
+        crossorigin="anonymous">
+    <title>Chuyển chữ thành số</title>
+</head>
+
+<body>
+    <div class="container">
+        <h1>CHUYỂN CHỮ THÀNH SỐ</h1>
+        <input type="text" id="input1" />
+        <button class="btn btn-primary" onclick="DocTienBangChu()">Chuyển</button>
+        <p>Kết quả:
+            <span class="result"></span>
+        </p>
+    </div>
+    <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
+        crossorigin="anonymous"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.0/umd/popper.min.js" integrity="sha384-cs/chFZiN24E4KMATLdqdvsezGxaGsi4hLGOzlXwp5UZB1LY//20VyM2taTB4QvJ"
+        crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
+        crossorigin="anonymous"></script>
+        <script>
+        // function myJsFunction() {
+        //     var text=document.getElementById('input1').value;
+        //     console.log(text);
+        // }
+        </script>
+    <script>
+        const ChuSo = [" không ", " một ", " hai ", " ba ", " bốn ", " năm ", " sáu ", " bảy ", " tám ", " chín "];
+        const Tien = ["", " nghìn", " triệu", " tỷ", " nghìn tỷ", " triệu tỷ"];
+
+        function DocSo3ChuSo(baso) {
+            var tram;
+            var chuc;
+            var donvi;
+            var KetQua = "";
+            tram = parseInt(baso / 100);
+            chuc = parseInt((baso % 100) / 10);
+            donvi = baso % 10;
+            if (tram == 0 && chuc == 0 && donvi == 0) return "";
+            if (tram != 0) {
+                KetQua += ChuSo[tram] + " trăm ";
+                if ((chuc == 0) && (donvi != 0)) KetQua += " linh ";
+            }
+            if ((chuc != 0) && (chuc != 1)) {
+                KetQua += ChuSo[chuc] + " mươi";
+                if ((chuc == 0) && (donvi != 0)) KetQua = KetQua + " linh ";
+            }
+            if (chuc == 1) KetQua += " mười ";
+            switch (donvi) {
+                case 1:
+                    if ((chuc != 0) && (chuc != 1)) {
+                        KetQua += " mốt ";
+                    }
+                    else {
+                        KetQua += ChuSo[donvi];
+                    }
+                    break;
+                case 5:
+                    if (chuc == 0) {
+                        KetQua += ChuSo[donvi];
+                    }
+                    else {
+                        KetQua += " lăm ";
+                    }
+                    break;
+                default:
+                    if (donvi != 0) {
+                        KetQua += ChuSo[donvi];
+                    }
+                    break;
+            }
+            return KetQua;
+        }
+
+
+        function DocTienBangChu() {
+            const SoTien = document.getElementById("input1").value;
+            console.log(SoTien);
+            
+            var lan = 0;
+            var i = 0;
+            var so = 0;
+            var KetQua = "";
+            var tmp = "";
+            var ViTri = new Array();
+            if (SoTien < 0) return "Số tiền âm !";
+            if (SoTien == 0) return "Không đồng !";
+            if (SoTien > 0) {
+                so = SoTien;
+            }
+            else {
+                so = -SoTien;
+            }
+            if (SoTien > 8999999999999999) {
+                //SoTien = 0;
+                return "Số quá lớn!";
+            }
+            ViTri[5] = Math.floor(so / 1000000000000000);
+            if (isNaN(ViTri[5]))
+                ViTri[5] = "0";
+            so = so - parseFloat(ViTri[5].toString()) * 1000000000000000;
+            ViTri[4] = Math.floor(so / 1000000000000);
+            if (isNaN(ViTri[4]))
+                ViTri[4] = "0";
+            so = so - parseFloat(ViTri[4].toString()) * 1000000000000;
+            ViTri[3] = Math.floor(so / 1000000000);
+            if (isNaN(ViTri[3]))
+                ViTri[3] = "0";
+            so = so - parseFloat(ViTri[3].toString()) * 1000000000;
+            ViTri[2] = parseInt(so / 1000000);
+            if (isNaN(ViTri[2]))
+                ViTri[2] = "0";
+            ViTri[1] = parseInt((so % 1000000) / 1000);
+            if (isNaN(ViTri[1]))
+                ViTri[1] = "0";
+            ViTri[0] = parseInt(so % 1000);
+            if (isNaN(ViTri[0]))
+                ViTri[0] = "0";
+            if (ViTri[5] > 0) {
+                lan = 5;
+            }
+            else if (ViTri[4] > 0) {
+                lan = 4;
+            }
+            else if (ViTri[3] > 0) {
+                lan = 3;
+            }
+            else if (ViTri[2] > 0) {
+                lan = 2;
+            }
+            else if (ViTri[1] > 0) {
+                lan = 1;
+            }
+            else {
+                lan = 0;
+            }
+            for (i = lan; i >= 0; i--) {
+                tmp = DocSo3ChuSo(ViTri[i]);
+                KetQua += tmp;
+                if (ViTri[i] > 0) KetQua += Tien[i];
+                if ((i > 0) && (tmp.length > 0)) KetQua += ',';//&& (!string.IsNullOrEmpty(tmp))
+            }
+            if (KetQua.substring(KetQua.length - 1) == ',') {
+                KetQua = KetQua.substring(0, KetQua.length - 1);
+            }
+            KetQua = KetQua.substring(1, 2).toUpperCase() + KetQua.substring(2);
+            
+            document.getElementsByClassName("result")[0].textContent = KetQua;
+
+            console.log(KetQua);
+            // return KetQua;//.substring(0, 1);//.toUpperCase();// + KetQua.substring(1);
+        }
+    </script>
+</body>
+
+</html>
