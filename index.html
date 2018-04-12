@@ -7,17 +7,42 @@
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/css/bootstrap.min.css" integrity="sha384-9gVQ4dYFwwWSjIDZnLEWnxCjeSWFphJiwGPXr1jddIhOegiu1FwO5qRGvFXOdJZ4"
         crossorigin="anonymous">
+    <style>
+        body {
+            background-color: antiquewhite
+        }
+
+        .container {
+            background-color: whitesmoke;
+            width: 70%;
+            padding: 2rem;
+            margin-top: 2rem;
+        }
+    </style>
     <title>Chuyển chữ thành số</title>
 </head>
 
 <body>
     <div class="container">
-        <h1>CHUYỂN CHỮ THÀNH SỐ</h1>
-        <input type="text" id="input1" />
-        <button class="btn btn-primary" onclick="DocTienBangChu()">Chuyển</button>
-        <p>Kết quả:
-            <span class="result"></span>
-        </p>
+
+        <div class="card">
+            <h5 class="card-header text-center font-weight-bold">CHUYỂN CHỮ THÀNH SỐ</h5>
+            <div class="card-body">
+
+                <div class="input-group">
+                    <input type="number" class="form-control" placeholder="Nhập số: 100000" id="input1">
+                    <div class="input-group-append">
+                        <!-- <span class="input-group-text" id="basic-addon2">@example.com</span> -->
+                        <button class="btn btn-primary" onclick="DocTienBangChu()">Chuyển</button>
+                    </div>
+                </div>
+
+                <p class="card-text mt-3">Kết quả:
+                    <span class="result text-primary"></span>
+                </p>
+            </div>
+        </div>
+
     </div>
     <script src="https://code.jquery.com/jquery-3.3.1.slim.min.js" integrity="sha384-q8i/X+965DzO0rT7abK41JStQIAqVgRVzpbzo5smXKp4YfRvH+8abtTE1Pi6jizo"
         crossorigin="anonymous"></script>
@@ -25,12 +50,6 @@
         crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
         crossorigin="anonymous"></script>
-        <script>
-        // function myJsFunction() {
-        //     var text=document.getElementById('input1').value;
-        //     console.log(text);
-        // }
-        </script>
     <script>
         const ChuSo = [" không ", " một ", " hai ", " ba ", " bốn ", " năm ", " sáu ", " bảy ", " tám ", " chín "];
         const Tien = ["", " nghìn", " triệu", " tỷ", " nghìn tỷ", " triệu tỷ"];
@@ -83,7 +102,7 @@
         function DocTienBangChu() {
             const SoTien = document.getElementById("input1").value;
             console.log(SoTien);
-            
+
             var lan = 0;
             var i = 0;
             var so = 0;
@@ -151,7 +170,7 @@
                 KetQua = KetQua.substring(0, KetQua.length - 1);
             }
             KetQua = KetQua.substring(1, 2).toUpperCase() + KetQua.substring(2);
-            
+
             document.getElementsByClassName("result")[0].textContent = KetQua;
 
             console.log(KetQua);
