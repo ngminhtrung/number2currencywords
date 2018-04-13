@@ -29,9 +29,9 @@
             <h5 class="card-header bg-primary text-center font-weight-bold text-white">CHUYỂN CHỮ THÀNH SỐ</h5>
             <div class="card-body">
                 <div class="input-group">
-                    <input type="number" class="form-control" placeholder="Nhập số: 100000" id="input1">
+                    <input type="text" class="form-control" placeholder="Nhập số: 100000" id="input1">
                     <div class="input-group-append">
-                        <button class="btn btn-primary" onclick="DocTienBangChu()">Chuyển</button>
+                        <button id="myBtn" class="btn btn-primary" onclick="convertNumbertoWords()">Chuyển</button>
                     </div>
                 </div>
 
@@ -49,128 +49,80 @@
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.0/js/bootstrap.min.js" integrity="sha384-uefMccjFJAIv6A+rW+L4AHf99KvxDjWSu1z9VI8SKNVmz4sk7buKt/6v9KI65qnm"
         crossorigin="anonymous"></script>
     <script>
-        const ChuSo = [" không ", " một ", " hai ", " ba ", " bốn ", " năm ", " sáu ", " bảy ", " tám ", " chín "];
-        const Tien = ["", " nghìn", " triệu", " tỷ", " nghìn tỷ", " triệu tỷ"];
 
-        function DocSo3ChuSo(baso) {
-            var tram;
-            var chuc;
-            var donvi;
-            var KetQua = "";
-            tram = parseInt(baso / 100);
-            chuc = parseInt((baso % 100) / 10);
-            donvi = baso % 10;
-            if (tram == 0 && chuc == 0 && donvi == 0) return "";
-            if (tram != 0) {
-                KetQua += ChuSo[tram] + " trăm ";
-                if ((chuc == 0) && (donvi != 0)) KetQua += " linh ";
+        var input = document.getElementById("input1");
+
+        // Execute a function when the user releases a key on the keyboard
+        input.addEventListener("keyup", function (event) {
+            // Cancel the default action, if needed
+            event.preventDefault();
+
+            let input = document.getElementById("input1").value;
+
+            input = input.replace(/[\D\s\._\-]+/g, "");
+            input = input ? parseInt(input, 10) : 0;
+
+            input = (input === "") ? "" : input.toLocaleString("en-US");
+
+            document.getElementById("input1").value = input;
+
+            // Number 13 is the "Enter" key on the keyboard
+            if (event.keyCode === 13) {
+                // Trigger the button element with a click
+                document.getElementById("myBtn").click();
             }
-            if ((chuc != 0) && (chuc != 1)) {
-                KetQua += ChuSo[chuc] + " mươi";
-                if ((chuc == 0) && (donvi != 0)) KetQua = KetQua + " linh ";
+        });
+
+        var DOCSO = function () {
+            var t = ["không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín"],
+                r = function (r, n) {
+                    var o = "",
+                        a = Math.floor(r / 10),
+                        e = r % 10;
+                    return a > 1 ? (o = " " + t[a] + " mươi", 1 == e && (o += " mốt")) : 1 == a ? (o = " mười", 1 == e && (o += " một")) : n && e > 0 && (o = " lẻ"), 5 == e && a >= 1 ? o += " lăm" : 4 == e && a >= 1 ? o += " tư" : (e > 1 || 1 == e && 0 == a) && (o += " " + t[e]), o
+                },
+                n = function (n, o) {
+                    var a = "",
+                        e = Math.floor(n / 100),
+                        n = n % 100;
+                    return o || e > 0 ? (a = " " + t[e] + " trăm ", a += r(n, !0)) : a = r(n, !1), a
+                },
+                o = function (t, r) {
+                    var o = "",
+                        a = Math.floor(t / 1e6),
+                        t = t % 1e6;
+                    a > 0 && (o = n(a, r) + " triệu, ", r = !0);
+                    var e = Math.floor(t / 1e3),
+                        t = t % 1e3;
+                    return e > 0 && (o += n(e, r) + " ngàn, ", r = !0), t > 0 && (o += n(t, r)), o
+                };
+            return {
+                doc: function (r) {
+                    if (0 == r) return t[0];
+                    var n = "",
+                        a = "";
+                    do ty = r % 1e9, r = Math.floor(r / 1e9), n = r > 0 ? o(ty, !0) + a + n : o(ty, !1) + a + n, a = " tỷ"; while (r > 0);
+                    return n.trim()
+                }
             }
-            if (chuc == 1) KetQua += " mười ";
-            switch (donvi) {
-                case 1:
-                    if ((chuc != 0) && (chuc != 1)) {
-                        KetQua += " mốt ";
-                    }
-                    else {
-                        KetQua += ChuSo[donvi];
-                    }
-                    break;
-                case 5:
-                    if (chuc == 0) {
-                        KetQua += ChuSo[donvi];
-                    }
-                    else {
-                        KetQua += " lăm ";
-                    }
-                    break;
-                default:
-                    if (donvi != 0) {
-                        KetQua += ChuSo[donvi];
-                    }
-                    break;
-            }
-            return KetQua;
+        }();
+
+        function convertNumbertoWords() {
+            let SoTien = document.getElementById("input1").value;
+
+            SoTien = SoTien.replace(/[\,\s\._\-]+/g, "");
+
+            SoTien = parseInt(SoTien, 10);
+
+            let result = upcaseFirstCharacter(DOCSO.doc(SoTien)) + " đồng." 
+
+            document.getElementsByClassName("result")[0].textContent = result;
         }
 
-
-        function DocTienBangChu() {
-            const SoTien = document.getElementById("input1").value;
-
-            var lan = 0;
-            var i = 0;
-            var so = 0;
-            var KetQua = "";
-            var tmp = "";
-            var ViTri = new Array();
-            if (SoTien < 0) return "Số tiền âm !";
-            if (SoTien == 0) return "Không đồng !";
-            if (SoTien > 0) {
-                so = SoTien;
-            }
-            else {
-                so = -SoTien;
-            }
-            if (SoTien > 8999999999999999) {
-                //SoTien = 0;
-                return "Số quá lớn!";
-            }
-            ViTri[5] = Math.floor(so / 1000000000000000);
-            if (isNaN(ViTri[5]))
-                ViTri[5] = "0";
-            so = so - parseFloat(ViTri[5].toString()) * 1000000000000000;
-            ViTri[4] = Math.floor(so / 1000000000000);
-            if (isNaN(ViTri[4]))
-                ViTri[4] = "0";
-            so = so - parseFloat(ViTri[4].toString()) * 1000000000000;
-            ViTri[3] = Math.floor(so / 1000000000);
-            if (isNaN(ViTri[3]))
-                ViTri[3] = "0";
-            so = so - parseFloat(ViTri[3].toString()) * 1000000000;
-            ViTri[2] = parseInt(so / 1000000);
-            if (isNaN(ViTri[2]))
-                ViTri[2] = "0";
-            ViTri[1] = parseInt((so % 1000000) / 1000);
-            if (isNaN(ViTri[1]))
-                ViTri[1] = "0";
-            ViTri[0] = parseInt(so % 1000);
-            if (isNaN(ViTri[0]))
-                ViTri[0] = "0";
-            if (ViTri[5] > 0) {
-                lan = 5;
-            }
-            else if (ViTri[4] > 0) {
-                lan = 4;
-            }
-            else if (ViTri[3] > 0) {
-                lan = 3;
-            }
-            else if (ViTri[2] > 0) {
-                lan = 2;
-            }
-            else if (ViTri[1] > 0) {
-                lan = 1;
-            }
-            else {
-                lan = 0;
-            }
-            for (i = lan; i >= 0; i--) {
-                tmp = DocSo3ChuSo(ViTri[i]);
-                KetQua += tmp;
-                if (ViTri[i] > 0) KetQua += Tien[i];
-                if ((i > 0) && (tmp.length > 0)) KetQua += ',';
-            }
-            if (KetQua.substring(KetQua.length - 1) == ',') {
-                KetQua = KetQua.substring(0, KetQua.length - 1);
-            }
-            KetQua = KetQua.substring(1, 2).toUpperCase() + KetQua.substring(2) + " đồng";
-
-            document.getElementsByClassName("result")[0].textContent = KetQua;
-
+        function upcaseFirstCharacter(string) {
+            return string.charAt(0).toUpperCase() + string.slice(1);
         }
+
     </script>
 </body>
 
